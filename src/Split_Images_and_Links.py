@@ -61,9 +61,7 @@ def split_nodes_link(old_nodes):
                 nodes.append(
                     textnode.Textnode(current_string[0], textnode.Texttype["Plain"])
                 )
-            nodes.append(
-                textnode.Textnode(f"[{link[0]}]({link[1]})", textnode.Texttype["Link"])
-            )
+            nodes.append(textnode.Textnode(link[0], textnode.Texttype["Link"], link[1]))
             current_string = current_string[1]
         if current_string != "":
             nodes.append(textnode.Textnode(current_string, textnode.Texttype["Plain"]))
