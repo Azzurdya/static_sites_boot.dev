@@ -1,6 +1,6 @@
 from enum import Enum
 
-from htmlnode import LeafNode
+from htmlnode import LeafNode, ParentNode
 
 Texttype = {
     "Plain": "Plain",
@@ -9,6 +9,8 @@ Texttype = {
     "Code": "Code",
     "Link": "Link",
     "Image": "Image",
+    "Unordered_List": "List",
+    "Ordered_List": "List",
 }
 
 
@@ -38,6 +40,8 @@ def text_node_to_html_node(text_node):
         return LeafNode(value=text_node.text, tag="i")
     elif text_node.texttype == "Code":
         return LeafNode(value=text_node.text, tag="code")
+    elif text_node.texttype == "List":
+        return list_node_children(text_node)
     elif text_node.texttype == "Link":
         return LeafNode(value=text_node.text, tag="a", props={"href": text_node.link})
     elif text_node.texttype == "Image":
@@ -46,3 +50,8 @@ def text_node_to_html_node(text_node):
         )
     else:
         raise ValueError(f"Unknown text type: {text_node.texttype}")
+
+
+def list_node_children(text_node):
+    value = text_node.text.split("\n")
+    return [LeafNode(value=item, tag="li") for item in value]
