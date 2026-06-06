@@ -1,3 +1,4 @@
+import re
 from pickletools import markobject
 
 import delimiter
@@ -9,9 +10,17 @@ from TextToBlock import block_to_type
 def text_to_textnodes(Text):
     type = block_to_type(Text)
     if type == "unordered_list":
-        return [textnode.Textnode(Text, textnode.Texttype["Unordered_List"])]
+        return [
+            textnode.Textnode(
+                re.sub(r"-\s", "", Text, re.M), textnode.Texttype["Unordered_List"]
+            )
+        ]
     elif type == "ordered_list":
-        return [textnode.Textnode(Text, textnode.Texttype["Ordered_List"])]
+        return [
+            textnode.Textnode(
+                re.sub(r"(\d.)", "", Text, re.M), textnode.Texttype["Ordered_List"]
+            )
+        ]
     else:
         markdown_text = [textnode.Textnode(Text, textnode.Texttype["Plain"])]
         New_TextNodes = delimiter.split_nodes_delimiter(
