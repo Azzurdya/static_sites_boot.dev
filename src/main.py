@@ -6,24 +6,15 @@ import markdown_to_html
 
 
 def main():
-    source = os.getcwd()
-    print(source)
-    public_files = os.listdir(f"{source}/public")
-    source_files = os.listdir(f"{source}/static")
-    print(public_files)
-    for file in public_files:
-        if os.path.exists(f"{source}/public/{file}"):
-            os.remove(f"{source}/public/{file}")
-    for file in source_files:
-        if os.path.exists(f"{source}/static/{file}"):
-            shutil.copy(f"{source}/static/{file}", f"{source}/public/{file}")
-        if file == "source.html":
-            markdown = open(f"{source}/src/source.md", "r").read()
-            template = open(f"{source}/template.html", "r").read()
-            html = html_wrapper(markdown, template)
-            print(html)
-            open(f"{source}/public/{file}", "w").write(html)
-    new_public_files = os.listdir(f"{source}/public")
+    branch = os.getcwd()
+    shutil.rmtree(f"{branch}/public")
+    os.mkdir(f"{branch}/public")
+    markdown = open(f"{branch}/src/source.md", "r").read()
+    template = open(f"{branch}/template.html", "r").read()
+    html = html_wrapper(markdown, template)
+    open(f"{branch}/static/source.html", "w").write(html)
+    shutil.copytree(f"{branch}/static", f"{branch}/public", dirs_exist_ok=True)
+    new_public_files = os.listdir(f"{branch}/public")
     return new_public_files
 
 
