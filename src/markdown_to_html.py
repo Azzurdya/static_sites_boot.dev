@@ -34,7 +34,9 @@ def parent_wrapper(html_nodes, type):
     if type == "paragraph":
         return ParentNode("p", children=html_nodes)
     elif type == "heading":
-        return ParentNode("h1", children=html_nodes)
+        nums = html_nodes[0].value.count("#")
+        html_nodes[0].value = html_nodes[0].value.lstrip("#")
+        return ParentNode(f"h{nums}", children=html_nodes)
     elif type == "code":
         return ParentNode("pre", children=html_nodes)
     elif type == "quote":
@@ -46,3 +48,15 @@ def parent_wrapper(html_nodes, type):
 
     else:
         return html_nodes
+
+
+md = """
+# title 1
+
+## heading 2
+
+## # invalid heading
+
+"""
+
+print(markdown_to_html_node(md))
