@@ -1,3 +1,5 @@
+import re
+
 import textnode
 import TextToBlock
 import TextToTextNode
@@ -40,6 +42,7 @@ def parent_wrapper(html_nodes, type):
     elif type == "code":
         return ParentNode("pre", children=html_nodes)
     elif type == "quote":
+        html_nodes[0].value = re.sub(r">", "", html_nodes[0].value)
         return ParentNode("blockquote", children=html_nodes)
     elif type == "unordered_list":
         return ParentNode("ul", children=html_nodes)

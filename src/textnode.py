@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 
 from htmlnode import LeafNode, ParentNode
@@ -54,5 +55,6 @@ def text_node_to_html_node(text_node):
 
 def list_node_children(text_node):
     value = text_node.text.split("\n")
+    value = [re.sub(r"\d+\.\s*", "", item) for item in value]
     print(value)
     return [LeafNode(value=item, tag="li") for item in value]
