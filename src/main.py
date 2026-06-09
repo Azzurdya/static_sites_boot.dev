@@ -6,16 +6,13 @@ import markdown_to_html
 
 
 def main():
-    branch = os.getcwd()
-    shutil.rmtree(f"{branch}/public")
-    os.mkdir(f"{branch}/public")
-    markdown = open(f"{branch}/src/source.md", "r").read()
-    template = open(f"{branch}/template.html", "r").read()
-    html = html_wrapper(markdown, template)
-    open(f"{branch}/static/source.html", "w").write(html)
-    shutil.copytree(f"{branch}/static", f"{branch}/public", dirs_exist_ok=True)
-    new_public_files = os.listdir(f"{branch}/public")
-    return new_public_files
+    BRANCH = os.getcwd()
+    try:
+        shutil.rmtree(f"{BRANCH}/public")
+    except FileNotFoundError:
+        pass
+    os.mkdir(f"{BRANCH}/public")
+    recursve_read_and_write(f"{BRANCH}/static", f"{BRANCH}/public", BRANCH)
 
 
 def heading_extracter(html):
@@ -33,4 +30,25 @@ def html_wrapper(markdown, template):
     return template
 
 
-print(main())
+def recursve_read_and_write(read_branch, write_branch, fetch_branch):
+    for filename in os.listdir(read_branch):
+        # print(f"{read_branch}/{filename}")
+        if ".md" in filename:
+            markdown = open(f"{read_branch}/{filename}", "r").read()
+            html = html_wrapper(
+                markdown, open(f"{fetch_branch}/template.html", "r").read()
+            )
+            # print(html)
+            open(f"{write_branch}/{filename.replace('.md', '.html')}", "w").write(html)
+            continue
+        elif ".png" in filename or ".css" in filename:
+            shutil.copy(f"{read_branch}/{filename}", f"{write_branch}/{filename}")
+            continue
+        elif os.path.isdir(f"{read_branch}/{filename}"):
+            os.mkdir(f"{write_branch}/{filename}")
+            recursve_read_and_write(
+                f"{read_branch}/{filename}", f"{write_branch}/{filename}", fetch_branch
+            )
+
+
+main()
