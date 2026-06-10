@@ -57,6 +57,7 @@ def recursve_read_and_write(read_branch, write_branch, fetch_branch, url):
 
 def replace_link(html, url):
     links = re.findall(r"<a href='(.*?)'>", html)
+    src = re.findall(r"<img src='(.*?)'>", html)
     for link in links:
         if link == "/":
             html = re.sub(rf"<a href='{link}'", rf"<a href='{url}'", html)
@@ -64,6 +65,9 @@ def replace_link(html, url):
             pass
         else:
             html = re.sub(rf"<a href='{link}'", rf"<a href='{url}{link}'", html)
+    for s in src:
+        html = re.sub(rf"<img src='{s}'", rf"<img src='{url}{s}'", html)
+
     return html
 
 
