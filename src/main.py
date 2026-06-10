@@ -24,6 +24,8 @@ def heading_extracter(html):
 
 def html_wrapper(markdown, template):
     html = markdown_to_html.markdown_to_html_node(markdown)
+    html = inline_list_elements(html)
+    # print(html)
     head_text, html = heading_extracter(html)
     template = re.sub(r"{{ Title }}", head_text, template)
     template = re.sub(r"{{ Content }}", html, template)
@@ -49,6 +51,19 @@ def recursve_read_and_write(read_branch, write_branch, fetch_branch):
             recursve_read_and_write(
                 f"{read_branch}/{filename}", f"{write_branch}/{filename}", fetch_branch
             )
+
+
+def inline_list_elements(html):
+    list_elements = re.findall(r"<li>(.*?)</li>", html)
+    for element in list_elements:
+        print(element)
+        new_element = re.sub(r"<li>", "", element)
+        new_element = re.sub(r"</li>", "", new_element)
+        new_element = markdown_to_html.markdown_to_html_node(new_element)
+        new_element = re.sub(r"<div>", "", new_element)
+        new_element = re.sub(r"</div>", "", new_element)
+        html = re.sub(rf"<li>(.*?)</li>", rf"<li>{new_element}</li>", html)
+    return html
 
 
 main()
