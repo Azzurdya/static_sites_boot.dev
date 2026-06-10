@@ -14,7 +14,6 @@ def split_nodes_image(old_nodes):
         text = node.text
         image_nodes = []
         current_string = text
-        # text_nodes = re.findall(r"\b\w+\b(?![^\[]*\])(?![^\(]*\))", text)
         image_nodes = regex_image_text_extract.extract_markdown_images(text)
 
         if len(image_nodes) == 0:
@@ -48,7 +47,6 @@ def split_nodes_link(old_nodes):
         text = node.text
         link_nodes = []
         current_string = text
-        # text_nodes = re.findall(r"\b\w+\b(?![^\[]*\])(?![^\(]*\))", text)
         link_nodes = regex_image_text_extract.extract_markdown_links(text)
 
         if len(link_nodes) == 0:

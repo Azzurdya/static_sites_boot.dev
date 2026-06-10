@@ -24,9 +24,7 @@ print('Hello, world!')
 
     def test_is_valid_ordered_list(self):
         self.assertTrue(TextToBlock.is_valid_ordered_list("1. Item 1\n2. Item 2"))
-        self.assertFalse(
-            TextToBlock.is_valid_ordered_list("1. Item 1\n3. Item 2")
-        )  # Invalid because of line 2
+        self.assertFalse(TextToBlock.is_valid_ordered_list("1. Item 1\n3. Item 2"))
 
     def test_block_type(self):
         blocks = TextToBlock.markdown_to_blocks(self.markdown_text)

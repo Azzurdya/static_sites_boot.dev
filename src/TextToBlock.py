@@ -29,7 +29,7 @@ def is_valid_ordered_list(block):
 
 
 def block_to_type(block):
-    if re.match(r"#{1,9}\s+(?!.*#)(.+)", block):  # Updated regex for headings
+    if re.match(r"#{1,9}\s+(?!.*#)(.+)", block):
         return BLOCKTYPES["h"]
     elif re.match(r"```\n(.*)\n```", block, re.DOTALL):
         return BLOCKTYPES["c"]

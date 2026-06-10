@@ -21,7 +21,6 @@ def markdown_to_html_node(markdown):
             parent_wrapper(markdown_block_to_html_node(nodes[i], type[i]), type[i])
         )
 
-    print(ParentNode("div", children=html_paragraph))
     return ParentNode("div", children=html_paragraph).to_html()
 
 
@@ -53,15 +52,3 @@ def parent_wrapper(html_nodes, type):
 
     else:
         return html_nodes
-
-
-# md = """
-# title 1
-
-## heading 2
-
-## # invalid heading
-
-# """
-
-# print(markdown_to_html_node(md))
