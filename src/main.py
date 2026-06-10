@@ -39,8 +39,7 @@ def recursve_read_and_write(read_branch, write_branch, fetch_branch, url):
             html = html_wrapper(
                 markdown, open(f"{fetch_branch}/template.html", "r").read()
             )
-            html = re.sub(r'href="/', rf'href="{url}/', html)
-            html = re.sub(r'src="/', rf'src="{url}/', html)
+            html = replace_link(html, url)
             open(f"{write_branch}/{filename.replace('.md', '.html')}", "w").write(html)
             continue
         elif ".png" in filename or ".css" in filename:
@@ -54,6 +53,18 @@ def recursve_read_and_write(read_branch, write_branch, fetch_branch, url):
                 fetch_branch,
                 url,
             )
+
+
+def replace_link(html, url):
+    links = re.findall(r"<a href='(.*?)'>", html)
+    for link in links:
+        if link == "/":
+            html = re.sub(rf"<a href='{link}'", rf"<a href='{url}'", html)
+        elif link.startswith("https://"):
+            pass
+        else:
+            html = re.sub(rf"<a href='{link}'", rf"<a href='{url}{link}'", html)
+    return html
 
 
 main()
