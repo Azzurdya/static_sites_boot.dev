@@ -10,11 +10,11 @@ def main():
     URL = sys.argv[1]
     BRANCH = os.getcwd()
     try:
-        shutil.rmtree(f"{BRANCH}/doc")
+        shutil.rmtree(f"{BRANCH}/docs")
     except FileNotFoundError:
         pass
-    os.mkdir(f"{BRANCH}/doc")
-    recursve_read_and_write(f"{BRANCH}/static", f"{BRANCH}/doc", BRANCH, URL)
+    os.mkdir(f"{BRANCH}/docs")
+    recursve_read_and_write(f"{BRANCH}/static", f"{BRANCH}/docs", BRANCH, URL)
 
 
 def heading_extracter(html):
