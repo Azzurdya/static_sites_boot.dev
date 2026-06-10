@@ -20,6 +20,8 @@ def markdown_to_html_node(markdown):
         html_paragraph.append(
             parent_wrapper(markdown_block_to_html_node(nodes[i], type[i]), type[i])
         )
+
+    print(ParentNode("div", children=html_paragraph))
     return ParentNode("div", children=html_paragraph).to_html()
 
 
@@ -45,9 +47,9 @@ def parent_wrapper(html_nodes, type):
         html_nodes[0].value = re.sub(r">", "", html_nodes[0].value)
         return ParentNode("blockquote", children=html_nodes)
     elif type == "unordered_list":
-        return ParentNode("ul", children=html_nodes)
+        return html_nodes
     elif type == "ordered_list":
-        return ParentNode("ol", children=html_nodes)
+        return html_nodes
 
     else:
         return html_nodes

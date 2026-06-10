@@ -10,8 +10,8 @@ Texttype = {
     "Code": "Code",
     "Link": "Link",
     "Image": "Image",
-    "Unordered_List": "List",
-    "Ordered_List": "List",
+    "Unordered_List": "Unordered_List",
+    "Ordered_List": "Ordered_List",
 }
 
 
@@ -41,8 +41,10 @@ def text_node_to_html_node(text_node):
         return LeafNode(value=text_node.text, tag="i")
     elif text_node.texttype == "Code":
         return LeafNode(value=text_node.text, tag="code")
-    elif text_node.texttype == "List":
-        return list_node_children(text_node)
+    elif text_node.texttype == "Ordered_List":
+        return Ordered_list_node_children(text_node)
+    elif text_node.texttype == "Unordered_List":
+        return Unordered_list_node_children(text_node)
     elif text_node.texttype == "Link":
         return LeafNode(value=text_node.text, tag="a", props={"href": text_node.link})
     elif text_node.texttype == "Image":
@@ -53,8 +55,27 @@ def text_node_to_html_node(text_node):
         raise ValueError(f"Unknown text type: {text_node.texttype}")
 
 
-def list_node_children(text_node):
-    value = text_node.text.split("\n")
-    value = [re.sub(r"\d+\.\s*", "", item) for item in value]
-    # print(value)
-    return [LeafNode(value=item, tag="li") for item in value]
+def Ordered_list_node_children(text_node):
+    list = text_node.text
+    li_nodes = []
+    for line in list:
+        line_html = ""
+        if line == "":
+            continue
+        for textnode in line:
+            line_html += text_node_to_html_node(textnode).to_html()
+        li_nodes.append(ParentNode(children=[LeafNode(value=line_html)], tag="li"))
+    return ParentNode("ol", children=li_nodes)
+
+
+def Unordered_list_node_children(text_node):
+    list = text_node.text
+    li_nodes = []
+    for line in list:
+        line_html = ""
+        if line == "":
+            continue
+        for textnode in line:
+            line_html += text_node_to_html_node(textnode).to_html()
+        li_nodes.append(ParentNode(children=[LeafNode(value=line_html)], tag="li"))
+    return ParentNode("ul", children=li_nodes)

@@ -10,17 +10,22 @@ from TextToBlock import block_to_type
 def text_to_textnodes(Text):
     type = block_to_type(Text)
     if type == "unordered_list":
-        return [
-            textnode.Textnode(
-                re.sub(r"-\s", "", Text, re.M), textnode.Texttype["Unordered_List"]
-            )
-        ]
+        list = Text.split("\n")
+        childern = []
+        for line in list:
+            line = re.sub(r"^- ", "", line, re.M)
+            line = text_to_textnodes(line)
+            childern.append(line)
+        return [textnode.Textnode(childern, textnode.Texttype["Unordered_List"])]
+
     elif type == "ordered_list":
-        return [
-            textnode.Textnode(
-                re.sub(r"(\d.)", "", Text, re.M), textnode.Texttype["Ordered_List"]
-            )
-        ]
+        list = Text.split("\n")
+        childern = []
+        for line in list:
+            line = re.sub(r"\d.", "", line, re.M)
+            line = text_to_textnodes(line)
+            childern.append(line)
+        return [textnode.Textnode(childern, textnode.Texttype["Ordered_List"])]
     else:
         markdown_text = [textnode.Textnode(Text, textnode.Texttype["Plain"])]
         New_TextNodes = delimiter.split_nodes_delimiter(
