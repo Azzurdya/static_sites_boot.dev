@@ -1,18 +1,20 @@
 import os
 import re
 import shutil
+import sys
 
 import markdown_to_html
 
 
 def main():
+    URL = sys.argv[1]
     BRANCH = os.getcwd()
     try:
-        shutil.rmtree(f"{BRANCH}/public")
+        shutil.rmtree(f"{BRANCH}/doc")
     except FileNotFoundError:
         pass
-    os.mkdir(f"{BRANCH}/public")
-    recursve_read_and_write(f"{BRANCH}/static", f"{BRANCH}/public", BRANCH)
+    os.mkdir(f"{BRANCH}/doc")
+    recursve_read_and_write(f"{BRANCH}/static", f"{BRANCH}/doc", BRANCH, URL)
 
 
 def heading_extracter(html):
@@ -30,13 +32,15 @@ def html_wrapper(markdown, template):
     return template
 
 
-def recursve_read_and_write(read_branch, write_branch, fetch_branch):
+def recursve_read_and_write(read_branch, write_branch, fetch_branch, url):
     for filename in os.listdir(read_branch):
         if ".md" in filename:
             markdown = open(f"{read_branch}/{filename}", "r").read()
             html = html_wrapper(
                 markdown, open(f"{fetch_branch}/template.html", "r").read()
             )
+            html = re.sub(r'href="/', rf'href="{url}/', html)
+            html = re.sub(r'src="/', rf'src="{url}/', html)
             open(f"{write_branch}/{filename.replace('.md', '.html')}", "w").write(html)
             continue
         elif ".png" in filename or ".css" in filename:
@@ -45,7 +49,10 @@ def recursve_read_and_write(read_branch, write_branch, fetch_branch):
         elif os.path.isdir(f"{read_branch}/{filename}"):
             os.mkdir(f"{write_branch}/{filename}")
             recursve_read_and_write(
-                f"{read_branch}/{filename}", f"{write_branch}/{filename}", fetch_branch
+                f"{read_branch}/{filename}",
+                f"{write_branch}/{filename}",
+                fetch_branch,
+                url,
             )
 
 
