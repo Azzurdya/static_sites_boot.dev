@@ -7,7 +7,10 @@ import markdown_to_html
 
 
 def main():
-    URL = sys.argv[1]
+    try:
+        URL = sys.argv[1]
+    except IndexError:
+        URL = ""
     BRANCH = os.getcwd()
     try:
         shutil.rmtree(f"{BRANCH}/docs")
@@ -29,8 +32,8 @@ def html_wrapper(markdown, template, url):
     head_text, html = heading_extracter(html)
     template = re.sub(r"{{ Title }}", head_text, template)
     template = re.sub(r"{{ Content }}", html, template)
-
-    template = replace_link(template, url)
+    if url != "":
+        template = replace_link(template, url)
 
     return template
 

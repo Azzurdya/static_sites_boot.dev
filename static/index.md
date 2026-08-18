@@ -6,7 +6,7 @@ Here's the deal, **I like Tolkien** .
 
 > "I am in fact a Hobbit in all but size."
 >
-> -- ADitya :)
+> -- tolkien
 
 ## Blog posts
 
